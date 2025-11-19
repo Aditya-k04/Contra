@@ -206,6 +206,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
 
   return (
     <div
+      ref={containerRef}
       className="bg-neutral-50 overflow-hidden w-full h-full relative"
       role="main"
       aria-label="Earnings summary for 2025"
@@ -215,8 +216,8 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
         className="absolute top-[410px] left-1/2 -translate-x-1/2 w-[1323px] h-[1323px] rounded-[661.5px] blur-[72px]"
         style={{
           background: "linear-gradient(115deg,rgba(243,228,255,1)_0%,rgba(210,232,250,1)_51%,rgba(227,252,255,1)_100%)",
-          opacity: circlesProgress,
-          transform: `translateY(${20 * (1 - circlesProgress)}px) scale(${0.95 + 0.05 * circlesProgress})`,
+          opacity: circlesOpacity,
+          transform: `scale(${circlesScale})`,
           willChange: "opacity, transform",
           transition: "none",
         }}
@@ -234,7 +235,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
             width: ellipse.width,
             height: ellipse.height,
             transform: "translateX(-50%)",
-            opacity: circlesProgress,
+            opacity: circlesOpacity,
             willChange: "opacity",
             transition: "none",
           }}
@@ -252,8 +253,8 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
           style={{
             top: icon.top,
             left: icon.left,
-            opacity: icon.progress,
-            transform: `scale(${0.8 + 0.2 * icon.progress})`,
+            opacity: icon.progress.opacity,
+            transform: `scale(${icon.progress.scale})`,
             willChange: "opacity, transform",
             transition: "none",
           }}
@@ -263,10 +264,9 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       ))}
 
       {/* Bottom text section */}
-      <section 
+      <section
         className="flex flex-col w-[410px] items-center absolute top-[694px] left-1/2 -translate-x-1/2"
         style={{
-          opacity: Math.max(text3Progress, text4Progress),
           willChange: "opacity, transform",
           transition: "none",
         }}
@@ -283,8 +283,8 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
             lineHeight: "32px",
             marginTop: "-1px",
             alignSelf: "stretch",
-            opacity: text3Progress,
-            transform: getElementTransform(0.45, 0.15),
+            opacity: text3Opacity,
+            transform: `translateY(${text3TranslateY}px)`,
             willChange: "opacity, transform",
             transition: "none",
           }}
@@ -303,8 +303,8 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
             letterSpacing: "-0.80px",
             lineHeight: "40px",
             alignSelf: "stretch",
-            opacity: text4Progress,
-            transform: getElementTransform(0.60, 0.15),
+            opacity: text4Opacity,
+            transform: `translateY(${text4TranslateY}px)`,
             willChange: "opacity, transform",
             transition: "none",
           }}
@@ -314,10 +314,9 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       </section>
 
       {/* Header section */}
-      <header 
+      <header
         className="absolute top-[150px] left-1/2 -translate-x-1/2 w-[410px]"
         style={{
-          opacity: Math.max(text1Progress, text2Progress),
           willChange: "opacity",
           transition: "none",
         }}
@@ -332,8 +331,8 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
             textAlign: "center",
             letterSpacing: "-0.96px",
             lineHeight: "normal",
-            opacity: text1Progress,
-            transform: getElementTransform(0, 0.15),
+            opacity: text1Opacity,
+            transform: `translateY(${text1TranslateY}px)`,
             willChange: "opacity, transform",
             transition: "none",
           }}
@@ -351,8 +350,8 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
             textAlign: "center",
             letterSpacing: "-1.12px",
             lineHeight: "56px",
-            opacity: text2Progress,
-            transform: getElementTransform(0.15, 0.15),
+            opacity: text2Opacity,
+            transform: `scale(${text2Scale})`,
             willChange: "opacity, transform",
             transition: "none",
           }}
