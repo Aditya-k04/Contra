@@ -19,21 +19,17 @@ export const EarningsSummary = () => {
   };
 
   // Calculate timeline points
+  let timelinePosition = 0;
+
   const TIMELINE = {
-    text1: { start: 0, duration: ANIMATION_DURATIONS.text1 },
-    text2: { start: ANIMATION_DURATIONS.text1, duration: ANIMATION_DURATIONS.text2 },
-    circles: { start: ANIMATION_DURATIONS.text1 + ANIMATION_DURATIONS.text2, duration: ANIMATION_DURATIONS.circles },
-    text3: { start: ANIMATION_DURATIONS.text1 + ANIMATION_DURATIONS.text2 + ANIMATION_DURATIONS.circles, duration: ANIMATION_DURATIONS.text3 },
-    text4: { start: ANIMATION_DURATIONS.text1 + ANIMATION_DURATIONS.text2 + ANIMATION_DURATIONS.circles + ANIMATION_DURATIONS.text3, duration: ANIMATION_DURATIONS.text4 },
+    text1: { start: timelinePosition, duration: ANIMATION_DURATIONS.text1 },
+    text2: { start: (timelinePosition += ANIMATION_DURATIONS.text1), duration: ANIMATION_DURATIONS.text2 },
+    circles: { start: (timelinePosition += ANIMATION_DURATIONS.text2), duration: ANIMATION_DURATIONS.circles },
+    text3: { start: (timelinePosition += ANIMATION_DURATIONS.circles), duration: ANIMATION_DURATIONS.text3 },
+    text4: { start: (timelinePosition += ANIMATION_DURATIONS.text3), duration: ANIMATION_DURATIONS.text4 },
   };
 
-  TIMELINE.text1.end = TIMELINE.text1.start + TIMELINE.text1.duration;
-  TIMELINE.text2.end = TIMELINE.text2.start + TIMELINE.text2.duration;
-  TIMELINE.circles.end = TIMELINE.circles.start + TIMELINE.circles.duration;
-  TIMELINE.text3.end = TIMELINE.text3.start + TIMELINE.text3.duration;
-  TIMELINE.text4.end = TIMELINE.text4.start + TIMELINE.text4.duration;
-
-  const badgesStartTime = TIMELINE.text4.end;
+  const badgesStartTime = timelinePosition + ANIMATION_DURATIONS.text4;
 
   // Helper to calculate element animation progress (0-1)
   const getAnimationProgress = (startTime: number, duration: number): number => {
