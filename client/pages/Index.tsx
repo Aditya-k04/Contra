@@ -64,8 +64,9 @@ export default function Index() {
           backgroundColor: "#FFFFFF",
           opacity: whiteOverlayOpacity,
           zIndex: 50,
-          willChange: "opacity",
-          transition: "opacity 0.6s ease-out",
+          willChange: "opacity, transform",
+          transition: "opacity 0.6s ease-out, transform 0.8s ease-out",
+          transform: whiteOverlayOpacity > 0 ? "scale(1.1)" : "scale(1)",
           pointerEvents: whiteOverlayOpacity === 1 ? "auto" : "none",
         }}
       />
