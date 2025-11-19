@@ -13,8 +13,9 @@ export default function Index() {
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      // Only prevent default scroll during Screen 1 (zoom animation)
-      if (isScreenOneActive) {
+      // Only apply scroll-scrub during Screen 1 (zoom animation)
+      // Once burst is complete, allow normal scrolling
+      if (whiteOverlayOpacity < 1) {
         e.preventDefault();
 
         scrollInputRef.current += e.deltaY;
@@ -38,7 +39,7 @@ export default function Index() {
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [isScreenOneActive]);
+  }, [whiteOverlayOpacity]);
 
   return (
     <>
