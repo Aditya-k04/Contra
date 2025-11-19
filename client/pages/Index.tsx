@@ -152,16 +152,7 @@ export default function Index() {
           backgroundColor: "#FAFAFA",
         }}
       >
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "100vh",
-            overflow: "hidden",
-          }}
-        >
-          <EarningsSummary isActive={screenState === "earnings"} />
-        </div>
+        <EarningsSummary isActive={screenState === "earnings"} />
       </div>
 
       {/* Global styles */}
