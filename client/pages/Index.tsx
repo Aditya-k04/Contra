@@ -118,6 +118,9 @@ export default function Index() {
       <style>{`
         html, body {
           overflow-x: hidden;
+          width: 100%;
+          margin: 0;
+          padding: 0;
         }
       `}</style>
     </>
