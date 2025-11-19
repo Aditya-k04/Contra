@@ -152,6 +152,26 @@ export default function Index() {
           backgroundColor: "#FAFAFA",
         }}
       >
+        {/* Static Gradient Ellipse Background - visible immediately */}
+        {screenState === "earnings" && (
+          <div
+            style={{
+              position: "absolute",
+              top: "410px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "1323px",
+              height: "1323px",
+              borderRadius: "50%",
+              background: "linear-gradient(90deg, #F3E4FF 0%, #D2E8FA 40%, #E3FCFF 100%)",
+              filter: "blur(144px)",
+              zIndex: 0,
+              pointerEvents: "none",
+              opacity: 1,
+            }}
+          />
+        )}
+
         <EarningsSummary isActive={screenState === "earnings"} />
       </div>
 
