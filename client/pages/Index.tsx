@@ -72,7 +72,7 @@ export default function Index() {
           height: "100vh",
           backgroundColor: "#FFFFFF",
           opacity: whiteOverlayOpacity,
-          zIndex: 10,
+          zIndex: 50,
           willChange: "opacity, transform",
           transition: "opacity 0.2s linear, transform 0.2s linear",
           transform: `scale(${1 + whiteOverlayOpacity * 0.1})`,
