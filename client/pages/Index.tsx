@@ -98,7 +98,7 @@ export default function Index() {
           </div>
 
           {/* Right Section - Empty for fixed image */}
-          <div className="flex-1 bg-[#000000]" />
+          <div className="flex-1 bg-[#151720]" />
         </div>
 
         {/* Scroll Content */}
