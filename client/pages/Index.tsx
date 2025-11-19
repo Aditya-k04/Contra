@@ -74,7 +74,7 @@ export default function Index() {
         }}
       />
 
-      {/* Yearly Earnings Summary Screen - Bound to white overlay opacity */}
+      {/* Yearly Earnings Summary Screen - Only animates after white burst is complete */}
       <div
         style={{
           position: "fixed",
@@ -84,13 +84,14 @@ export default function Index() {
           height: "900px",
           transform: "translateY(-50%)",
           zIndex: 50,
-          opacity: whiteOverlayOpacity,
+          opacity: whiteOverlayOpacity >= 0.95 ? 1 : 0,
           willChange: "opacity",
-          pointerEvents: whiteOverlayOpacity > 0.9 ? "auto" : "none",
+          pointerEvents: whiteOverlayOpacity >= 0.95 ? "auto" : "none",
           overflow: "hidden",
+          transition: whiteOverlayOpacity >= 0.95 ? "none" : "opacity 0.3s ease-out",
         }}
       >
-        <EarningsSummary animationProgress={whiteOverlayOpacity} />
+        <EarningsSummary animationProgress={whiteOverlayOpacity >= 0.95 ? whiteOverlayOpacity - 0.95 : 0} />
       </div>
 
       {/* Main Content Container */}
