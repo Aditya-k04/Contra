@@ -11,11 +11,11 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
 
   // Define animation timeline (in milliseconds)
   const ANIMATION_DURATIONS = {
-    text1: 500,      // "In 2025, you earned"
-    text2: 400,      // "$50,000"
-    circles: 500,    // glow circles
-    text3: 400,      // "across"
-    text4: 400,      // "5 projects"
+    text1: 500, // "In 2025, you earned"
+    text2: 400, // "$50,000"
+    circles: 500, // glow circles
+    text3: 400, // "across"
+    text4: 400, // "5 projects"
     badgeDelay: 250, // stagger between badges
     badgeDuration: 300, // each badge animation
   };
@@ -25,16 +25,31 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
 
   const TIMELINE = {
     text1: { start: timelinePosition, duration: ANIMATION_DURATIONS.text1 },
-    text2: { start: (timelinePosition += ANIMATION_DURATIONS.text1), duration: ANIMATION_DURATIONS.text2 },
-    circles: { start: (timelinePosition += ANIMATION_DURATIONS.text2), duration: ANIMATION_DURATIONS.circles },
-    text3: { start: (timelinePosition += ANIMATION_DURATIONS.circles), duration: ANIMATION_DURATIONS.text3 },
-    text4: { start: (timelinePosition += ANIMATION_DURATIONS.text3), duration: ANIMATION_DURATIONS.text4 },
+    text2: {
+      start: (timelinePosition += ANIMATION_DURATIONS.text1),
+      duration: ANIMATION_DURATIONS.text2,
+    },
+    circles: {
+      start: (timelinePosition += ANIMATION_DURATIONS.text2),
+      duration: ANIMATION_DURATIONS.circles,
+    },
+    text3: {
+      start: (timelinePosition += ANIMATION_DURATIONS.circles),
+      duration: ANIMATION_DURATIONS.text3,
+    },
+    text4: {
+      start: (timelinePosition += ANIMATION_DURATIONS.text3),
+      duration: ANIMATION_DURATIONS.text4,
+    },
   };
 
   const badgesStartTime = timelinePosition + ANIMATION_DURATIONS.text4;
 
   // Helper to calculate element animation progress (0-1)
-  const getAnimationProgress = (startTime: number, duration: number): number => {
+  const getAnimationProgress = (
+    startTime: number,
+    duration: number,
+  ): number => {
     if (elapsedTime < startTime) return 0;
     if (elapsedTime >= startTime + duration) return 1;
     return (elapsedTime - startTime) / duration;
@@ -84,25 +99,53 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
   }, [isActive]);
 
   // Animation values
-  const text1Opacity = getOpacity(TIMELINE.text1.start, TIMELINE.text1.duration);
-  const text1TranslateY = getTranslateY(TIMELINE.text1.start, TIMELINE.text1.duration);
+  const text1Opacity = getOpacity(
+    TIMELINE.text1.start,
+    TIMELINE.text1.duration,
+  );
+  const text1TranslateY = getTranslateY(
+    TIMELINE.text1.start,
+    TIMELINE.text1.duration,
+  );
 
-  const text2Progress = getAnimationProgress(TIMELINE.text2.start, TIMELINE.text2.duration);
+  const text2Progress = getAnimationProgress(
+    TIMELINE.text2.start,
+    TIMELINE.text2.duration,
+  );
   const text2Opacity = text2Progress;
   const text2Scale = 0.8 + 0.2 * text2Progress;
 
-  const circlesOpacity = getOpacity(TIMELINE.circles.start, TIMELINE.circles.duration);
-  const circlesScale = 0.9 + 0.1 * getAnimationProgress(TIMELINE.circles.start, TIMELINE.circles.duration);
+  const circlesOpacity = getOpacity(
+    TIMELINE.circles.start,
+    TIMELINE.circles.duration,
+  );
+  const circlesScale =
+    0.9 +
+    0.1 *
+      getAnimationProgress(TIMELINE.circles.start, TIMELINE.circles.duration);
 
-  const text3Opacity = getOpacity(TIMELINE.text3.start, TIMELINE.text3.duration);
-  const text3TranslateY = getTranslateY(TIMELINE.text3.start, TIMELINE.text3.duration);
+  const text3Opacity = getOpacity(
+    TIMELINE.text3.start,
+    TIMELINE.text3.duration,
+  );
+  const text3TranslateY = getTranslateY(
+    TIMELINE.text3.start,
+    TIMELINE.text3.duration,
+  );
 
-  const text4Opacity = getOpacity(TIMELINE.text4.start, TIMELINE.text4.duration);
-  const text4TranslateY = getTranslateY(TIMELINE.text4.start, TIMELINE.text4.duration);
+  const text4Opacity = getOpacity(
+    TIMELINE.text4.start,
+    TIMELINE.text4.duration,
+  );
+  const text4TranslateY = getTranslateY(
+    TIMELINE.text4.start,
+    TIMELINE.text4.duration,
+  );
 
   // Badge animations
   const badgeProgresses = [0, 1, 2, 3, 4].map((index) => {
-    const badgeStartTime = badgesStartTime + index * ANIMATION_DURATIONS.badgeDelay;
+    const badgeStartTime =
+      badgesStartTime + index * ANIMATION_DURATIONS.badgeDelay;
     return {
       opacity: getOpacity(badgeStartTime, ANIMATION_DURATIONS.badgeDuration),
       scale: getScale(badgeStartTime, ANIMATION_DURATIONS.badgeDuration),
@@ -192,7 +235,8 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
       <div
         className="absolute top-[410px] left-1/2 -translate-x-1/2 w-[1323px] h-[1323px] rounded-[661.5px] blur-[72px]"
         style={{
-          background: "linear-gradient(115deg,rgba(243,228,255,1)_0%,rgba(210,232,250,1)_51%,rgba(227,252,255,1)_100%)",
+          background:
+            "linear-gradient(115deg,rgba(243,228,255,1)_0%,rgba(210,232,250,1)_51%,rgba(227,252,255,1)_100%)",
           opacity: circlesOpacity,
           transform: `scale(${circlesScale})`,
           willChange: "opacity, transform",
@@ -251,7 +295,8 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
         {/* "across" text */}
         <p
           style={{
-            fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontFamily:
+              "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
             fontWeight: 400,
             color: "#9b9b9b",
             fontSize: "32px",
@@ -272,7 +317,8 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
         {/* "5 projects" text */}
         <p
           style={{
-            fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontFamily:
+              "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
             fontWeight: 500,
             color: "#181818",
             fontSize: "40px",
@@ -301,7 +347,8 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
         {/* "In 2025, you earned" text */}
         <p
           style={{
-            fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontFamily:
+              "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
             fontWeight: 400,
             color: "#9b9b9b",
             fontSize: "48px",
@@ -320,7 +367,8 @@ export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
         {/* "$50,000" amount */}
         <p
           style={{
-            fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
+            fontFamily:
+              "'Helvetica Neue', -apple-system, BlinkMacSystemFont, sans-serif",
             fontWeight: 500,
             color: "#181818",
             fontSize: "56px",
