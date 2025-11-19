@@ -30,12 +30,12 @@ export default function Index() {
       const currentScale = 1 + easedProgress * (maxScale - 1);
       setScale(currentScale);
 
-      // Trigger white overlay at max scale
-      if (progress >= 1) {
-        setWhiteOverlayOpacity(1);
-      } else {
-        setWhiteOverlayOpacity(0);
-      }
+      // Trigger white overlay based on scale range (35-40)
+      // Scale 35 = 87.5% progress, Scale 40 = 100% progress
+      const burstStartScale = 35;
+      const burstRange = maxScale - burstStartScale; // 5
+      const burstProgress = Math.max(0, (currentScale - burstStartScale) / burstRange);
+      setWhiteOverlayOpacity(Math.min(1, burstProgress));
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
