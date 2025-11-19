@@ -1,34 +1,135 @@
+import { useEffect, useRef, useState } from "react";
+
 interface EarningsSummaryProps {
   animationProgress: number;
 }
 
 export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps) => {
-  // Calculate animation progress for each element in sequence
-  // animationProgress is 0-1, where 0 = trigger point, 1 = all animations complete
-  const getElementOpacity = (startPoint: number, duration: number = 0.15) => {
-    const localProgress = Math.max(0, (animationProgress - startPoint) / duration);
-    return Math.min(1, localProgress);
+  const [isVisible, setIsVisible] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animationFrameRef = useRef<number>();
+  const startTimeRef = useRef<number>(0);
+
+  // Define animation timeline (in milliseconds)
+  const ANIMATION_DURATIONS = {
+    text1: 500,      // "In 2025, you earned"
+    text2: 400,      // "$50,000"
+    circles: 500,    // glow circles
+    text3: 400,      // "across"
+    text4: 400,      // "5 projects"
+    badgeDelay: 250, // stagger between badges
+    badgeDuration: 300, // each badge animation
   };
 
-  const getElementTransform = (startPoint: number, duration: number = 0.15) => {
-    const opacity = getElementOpacity(startPoint, duration);
-    return `translateY(${20 * (1 - opacity)}px)`;
+  // Calculate timeline points
+  const TIMELINE = {
+    text1: { start: 0, duration: ANIMATION_DURATIONS.text1 },
+    text2: { start: ANIMATION_DURATIONS.text1, duration: ANIMATION_DURATIONS.text2 },
+    circles: { start: ANIMATION_DURATIONS.text1 + ANIMATION_DURATIONS.text2, duration: ANIMATION_DURATIONS.circles },
+    text3: { start: ANIMATION_DURATIONS.text1 + ANIMATION_DURATIONS.text2 + ANIMATION_DURATIONS.circles, duration: ANIMATION_DURATIONS.text3 },
+    text4: { start: ANIMATION_DURATIONS.text1 + ANIMATION_DURATIONS.text2 + ANIMATION_DURATIONS.circles + ANIMATION_DURATIONS.text3, duration: ANIMATION_DURATIONS.text4 },
   };
 
-  // Animation sequence starts at animationProgress = 0
-  // Total duration: ~1.0 of the animation progress
-  const text1Progress = getElementOpacity(0, 0.12); // "In 2025, you earned" - first
-  const text2Progress = getElementOpacity(0.12, 0.12); // "$50,000" - after text1
-  const circlesProgress = getElementOpacity(0.24, 0.12); // glow circles - after text2
-  const text3Progress = getElementOpacity(0.36, 0.12); // "across" - after circles
-  const text4Progress = getElementOpacity(0.48, 0.12); // "5 projects" - after text3
+  TIMELINE.text1.end = TIMELINE.text1.start + TIMELINE.text1.duration;
+  TIMELINE.text2.end = TIMELINE.text2.start + TIMELINE.text2.duration;
+  TIMELINE.circles.end = TIMELINE.circles.start + TIMELINE.circles.duration;
+  TIMELINE.text3.end = TIMELINE.text3.start + TIMELINE.text3.duration;
+  TIMELINE.text4.end = TIMELINE.text4.start + TIMELINE.text4.duration;
 
-  // Badges animate one by one - each with shorter duration
-  const badge1Progress = getElementOpacity(0.60, 0.08);
-  const badge2Progress = getElementOpacity(0.68, 0.08);
-  const badge3Progress = getElementOpacity(0.76, 0.08);
-  const badge4Progress = getElementOpacity(0.84, 0.08);
-  const badge5Progress = getElementOpacity(0.92, 0.08);
+  const badgesStartTime = TIMELINE.text4.end;
+
+  // Helper to calculate element animation progress (0-1)
+  const getAnimationProgress = (startTime: number, duration: number): number => {
+    if (elapsedTime < startTime) return 0;
+    if (elapsedTime >= startTime + duration) return 1;
+    return (elapsedTime - startTime) / duration;
+  };
+
+  const getOpacity = (startTime: number, duration: number): number => {
+    return getAnimationProgress(startTime, duration);
+  };
+
+  const getTranslateY = (startTime: number, duration: number): number => {
+    const progress = getAnimationProgress(startTime, duration);
+    return 20 * (1 - progress); // 20px to 0px
+  };
+
+  const getScale = (startTime: number, duration: number): number => {
+    const progress = getAnimationProgress(startTime, duration);
+    return 0.8 + 0.2 * progress; // 0.8 to 1
+  };
+
+  // Detect when earnings screen enters viewport
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !isVisible) {
+            setIsVisible(true);
+            startTimeRef.current = Date.now();
+          }
+        });
+      },
+      { threshold: 0.2 } // 20% of element visible
+    );
+
+    if (containerRef.current) {
+      observer.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.unobserve(containerRef.current);
+      }
+    };
+  }, [isVisible]);
+
+  // Animation loop
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const animate = () => {
+      const now = Date.now();
+      const elapsed = now - startTimeRef.current;
+      setElapsedTime(elapsed);
+      animationFrameRef.current = requestAnimationFrame(animate);
+    };
+
+    animationFrameRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current);
+      }
+    };
+  }, [isVisible]);
+
+  // Animation values
+  const text1Opacity = getOpacity(TIMELINE.text1.start, TIMELINE.text1.duration);
+  const text1TranslateY = getTranslateY(TIMELINE.text1.start, TIMELINE.text1.duration);
+
+  const text2Progress = getAnimationProgress(TIMELINE.text2.start, TIMELINE.text2.duration);
+  const text2Opacity = text2Progress;
+  const text2Scale = 0.8 + 0.2 * text2Progress;
+
+  const circlesOpacity = getOpacity(TIMELINE.circles.start, TIMELINE.circles.duration);
+  const circlesScale = 0.9 + 0.1 * getAnimationProgress(TIMELINE.circles.start, TIMELINE.circles.duration);
+
+  const text3Opacity = getOpacity(TIMELINE.text3.start, TIMELINE.text3.duration);
+  const text3TranslateY = getTranslateY(TIMELINE.text3.start, TIMELINE.text3.duration);
+
+  const text4Opacity = getOpacity(TIMELINE.text4.start, TIMELINE.text4.duration);
+  const text4TranslateY = getTranslateY(TIMELINE.text4.start, TIMELINE.text4.duration);
+
+  // Badge animations
+  const badgeProgresses = [0, 1, 2, 3, 4].map((index) => {
+    const badgeStartTime = badgesStartTime + index * ANIMATION_DURATIONS.badgeDelay;
+    return {
+      opacity: getOpacity(badgeStartTime, ANIMATION_DURATIONS.badgeDuration),
+      scale: getScale(badgeStartTime, ANIMATION_DURATIONS.badgeDuration),
+    };
+  });
 
   const projectIcons = [
     {
