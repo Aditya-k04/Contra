@@ -165,7 +165,7 @@ export default function Index() {
               borderRadius: "50%",
               background: "linear-gradient(90deg, #F3E4FF 0%, #D2E8FA 40%, #E3FCFF 100%)",
               filter: "blur(144px)",
-              zIndex: 0,
+              zIndex: 0.5,
               pointerEvents: "none",
               opacity: 1,
             }}
