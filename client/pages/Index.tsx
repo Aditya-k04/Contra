@@ -17,7 +17,7 @@ export default function Index() {
       </div>
 
       {/* Right Section */}
-      <div className="flex-1 bg-[#1A1F2E] flex items-center justify-center">
+      <div className="flex-1 bg-[#000000] flex items-center justify-center">
         <img
           src="https://api.builder.io/api/v1/image/assets/TEMP/352bc2b14b51ee7b4f1dd013e06103e38711da49?width=1600"
           alt="3D Ribbon Graphic"
