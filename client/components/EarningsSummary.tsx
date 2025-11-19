@@ -4,6 +4,7 @@ interface EarningsSummaryProps {
 
 export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps) => {
   // Calculate animation progress for each element in sequence
+  // animationProgress is 0-1, where 0 = trigger point, 1 = all animations complete
   const getElementOpacity = (startPoint: number, duration: number = 0.15) => {
     const localProgress = Math.max(0, (animationProgress - startPoint) / duration);
     return Math.min(1, localProgress);
@@ -14,19 +15,20 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
     return `translateY(${20 * (1 - opacity)}px)`;
   };
 
-  // Animation sequence
-  const text1Progress = getElementOpacity(0, 0.15); // "In 2025, you earned" - first
-  const text2Progress = getElementOpacity(0.15, 0.15); // "$50,000" - after text1
-  const circlesProgress = getElementOpacity(0.30, 0.15); // glow circles - after text2
-  const text3Progress = getElementOpacity(0.45, 0.15); // "across" - after circles
-  const text4Progress = getElementOpacity(0.60, 0.15); // "5 projects" - after text3
-  
-  // Badges animate one by one
-  const badge1Progress = getElementOpacity(0.75, 0.10);
-  const badge2Progress = getElementOpacity(0.82, 0.10);
-  const badge3Progress = getElementOpacity(0.89, 0.10);
-  const badge4Progress = getElementOpacity(0.96, 0.10);
-  const badge5Progress = getElementOpacity(1.03, 0.10);
+  // Animation sequence starts at animationProgress = 0
+  // Total duration: ~1.0 of the animation progress
+  const text1Progress = getElementOpacity(0, 0.12); // "In 2025, you earned" - first
+  const text2Progress = getElementOpacity(0.12, 0.12); // "$50,000" - after text1
+  const circlesProgress = getElementOpacity(0.24, 0.12); // glow circles - after text2
+  const text3Progress = getElementOpacity(0.36, 0.12); // "across" - after circles
+  const text4Progress = getElementOpacity(0.48, 0.12); // "5 projects" - after text3
+
+  // Badges animate one by one - each with shorter duration
+  const badge1Progress = getElementOpacity(0.60, 0.08);
+  const badge2Progress = getElementOpacity(0.68, 0.08);
+  const badge3Progress = getElementOpacity(0.76, 0.08);
+  const badge4Progress = getElementOpacity(0.84, 0.08);
+  const badge5Progress = getElementOpacity(0.92, 0.08);
 
   const projectIcons = [
     {
