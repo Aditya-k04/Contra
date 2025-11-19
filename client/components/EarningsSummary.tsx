@@ -1,10 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-interface EarningsSummaryProps {
-  animationProgress: number;
-}
-
-export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps) => {
+export const EarningsSummary = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [elapsedTime, setElapsedTime] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);

@@ -87,7 +87,7 @@ export default function Index() {
           overflow: "hidden",
         }}
       >
-        <EarningsSummary animationProgress={0} />
+        <EarningsSummary />
       </div>
 
       {/* Main Content Container */}
