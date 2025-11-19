@@ -38,6 +38,8 @@ export default function Index() {
 
   return (
     <>
+      {/* ===== SCREEN 1: ZOOM IMAGE + WHITE BURST ===== */}
+      
       {/* Fixed Image - Positioned on right side */}
       <img
         src="https://api.builder.io/api/v1/image/assets/TEMP/352bc2b14b51ee7b4f1dd013e06103e38711da49?width=1600"
@@ -74,23 +76,7 @@ export default function Index() {
         }}
       />
 
-      {/* Yearly Earnings Summary Screen - Animates when entering viewport */}
-      <div
-        style={{
-          position: "fixed",
-          top: "50%",
-          left: 0,
-          width: "100vw",
-          height: "900px",
-          transform: "translateY(-50%)",
-          zIndex: 50,
-          overflow: "hidden",
-        }}
-      >
-        <EarningsSummary />
-      </div>
-
-      {/* Main Content Container */}
+      {/* SCREEN 1: Main Content Container */}
       <div
         style={{
           position: "relative",
@@ -121,6 +107,20 @@ export default function Index() {
           {/* Right Section */}
           <div className="flex-1 bg-[#151720]" />
         </div>
+      </div>
+
+      {/* ===== SCREEN 2: EARNINGS SUMMARY ===== */}
+      {/* This appears as the next screen in natural flow */}
+      <div
+        style={{
+          position: "relative",
+          zIndex: 50,
+          width: "100vw",
+          height: "900px",
+          overflow: "hidden",
+        }}
+      >
+        <EarningsSummary />
       </div>
 
       {/* Global styles */}
