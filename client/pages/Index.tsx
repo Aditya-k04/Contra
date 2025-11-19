@@ -77,11 +77,12 @@ export default function Index() {
       {/* Yearly Earnings Summary Screen - Bound to white overlay opacity */}
       <div
         style={{
-          position: "absolute",
-          top: "100vh",
+          position: "fixed",
+          top: "50%",
           left: 0,
           width: "100vw",
           height: "900px",
+          transform: "translateY(-50%)",
           zIndex: 50,
           opacity: whiteOverlayOpacity,
           willChange: "opacity",
