@@ -94,135 +94,262 @@ export default function Index() {
           transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
           willChange: "opacity, transform",
           pointerEvents: summaryScreenVisible ? "auto" : "none",
+          overflow: "hidden",
         }}
       >
         <div
-          className="w-full h-full flex items-center justify-center relative overflow-hidden"
+          className="w-full h-full flex items-center justify-center relative"
           style={{
-            background: "linear-gradient(135deg, #FEFEFE 0%, #F0F4FF 30%, #FFF0F8 60%, #FEFEFE 100%)",
+            background: "linear-gradient(135deg, #FEFEFE 0%, #F3F7FF 25%, #FEF5FA 50%, #F8FAFF 75%, #FEFEFE 100%)",
           }}
         >
-          {/* Radial Rings Background */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[200vw] h-[200vw] pointer-events-none">
-            {[1, 2, 3, 4].map((ring) => (
-              <div
-                key={ring}
-                className="absolute bottom-0 left-1/2 -translate-x-1/2 rounded-full"
-                style={{
-                  width: `${ring * 25}%`,
-                  height: `${ring * 25}%`,
-                  background: `radial-gradient(circle, transparent 60%, ${
-                    ring % 2 === 0 
-                      ? "rgba(147, 197, 253, 0.08)" 
-                      : "rgba(251, 207, 232, 0.08)"
-                  } 70%, transparent 80%)`,
-                  filter: "blur(2px)",
-                }}
-              />
-            ))}
+          {/* Radial Rings Background - from bottom center */}
+          <div
+            className="absolute pointer-events-none"
+            style={{
+              bottom: "-10%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "150vw",
+              height: "150vh",
+            }}
+          >
+            {/* Ring 1 - Outermost */}
+            <div
+              className="absolute rounded-full"
+              style={{
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "120%",
+                height: "120%",
+                border: "1px solid",
+                borderColor: "rgba(147, 197, 253, 0.15)",
+                boxShadow: "0 0 40px rgba(147, 197, 253, 0.1), inset 0 0 40px rgba(147, 197, 253, 0.05)",
+                filter: "blur(1px)",
+              }}
+            />
+            {/* Ring 2 */}
+            <div
+              className="absolute rounded-full"
+              style={{
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "75%",
+                height: "75%",
+                border: "1px solid",
+                borderColor: "rgba(251, 207, 232, 0.12)",
+                boxShadow: "0 0 30px rgba(251, 207, 232, 0.08)",
+                filter: "blur(1px)",
+              }}
+            />
+            {/* Ring 3 */}
+            <div
+              className="absolute rounded-full"
+              style={{
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "45%",
+                height: "45%",
+                border: "1px solid",
+                borderColor: "rgba(165, 180, 252, 0.15)",
+                boxShadow: "0 0 20px rgba(165, 180, 252, 0.1)",
+                filter: "blur(0.5px)",
+              }}
+            />
           </div>
 
           {/* Content Container */}
-          <div className="relative z-10 text-center px-6 py-12">
+          <div className="relative z-20 text-center px-8">
             {/* Headline */}
-            <p className="text-gray-400 text-[clamp(16px,2vw,20px)] font-light mb-2 tracking-wide">
+            <p
+              style={{
+                color: "#A3A3A3",
+                fontSize: "18px",
+                fontWeight: 400,
+                marginBottom: "8px",
+                letterSpacing: "0.5px",
+                fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+              }}
+            >
               In 2025, you earned
             </p>
 
             {/* Big Number */}
-            <h1 className="text-[clamp(48px,10vw,96px)] font-bold text-black mb-8 tracking-tight">
+            <h1
+              style={{
+                color: "#000000",
+                fontSize: "clamp(56px, 12vw, 104px)",
+                fontWeight: 700,
+                marginBottom: "32px",
+                marginTop: "8px",
+                letterSpacing: "-1px",
+                fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+                lineHeight: 1.1,
+              }}
+            >
               $50,000
             </h1>
 
             {/* Subtext */}
-            <div className="space-y-1">
-              <p className="text-gray-400 text-[clamp(14px,1.5vw,18px)] font-light">
+            <div style={{ marginTop: "24px" }}>
+              <p
+                style={{
+                  color: "#A3A3A3",
+                  fontSize: "16px",
+                  fontWeight: 400,
+                  marginBottom: "4px",
+                  fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+                }}
+              >
                 across
               </p>
-              <p className="text-black text-[clamp(18px,2vw,24px)] font-bold">
+              <p
+                style={{
+                  color: "#000000",
+                  fontSize: "clamp(18px, 2vw, 28px)",
+                  fontWeight: 700,
+                  fontFamily: "'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Inter', sans-serif",
+                  letterSpacing: "-0.5px",
+                }}
+              >
                 5 projects
               </p>
             </div>
           </div>
 
           {/* Floating Icon Badges */}
-          <div className="absolute inset-0 pointer-events-none">
-            {/* Figma Logo - Top Left */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden">
+            {/* Sparkle/Cross - Top Left */}
             <div
               className="absolute"
               style={{
-                left: "20%",
-                top: "30%",
+                left: "18%",
+                top: "32%",
+                transform: "translate(-50%, -50%)",
               }}
             >
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                <svg viewBox="0 0 38 57" className="w-6 h-6 md:w-8 md:h-8">
-                  <path fill="#1abcfe" d="M19 28.5a9.5 9.5 0 1 1 19 0 9.5 9.5 0 0 1-19 0z"/>
-                  <path fill="#0acf83" d="M0 47.5A9.5 9.5 0 0 1 9.5 38H19v9.5a9.5 9.5 0 1 1-19 0z"/>
-                  <path fill="#ff7262" d="M19 0v19h9.5a9.5 9.5 0 1 0 0-19H19z"/>
-                  <path fill="#f24e1e" d="M0 9.5A9.5 9.5 0 0 0 9.5 19H19V0H9.5A9.5 9.5 0 0 0 0 9.5z"/>
-                  <path fill="#a259ff" d="M0 28.5A9.5 9.5 0 0 0 9.5 38H19V19H9.5A9.5 9.5 0 0 0 0 28.5z"/>
+              <div
+                className="rounded-full flex items-center justify-center"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+                }}
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#1A1A1A">
+                  <path d="M12 2l1.5 4.5h4.5l-3.5 2.5 1.5 4.5L12 11l-3.5 2.5 1.5-4.5-3.5-2.5h4.5M12 14l-1.5 4.5h-4.5l3.5 2.5-1.5 4.5L12 22l3.5 2.5-1.5-4.5 3.5-2.5h-4.5z" />
                 </svg>
               </div>
             </div>
 
-            {/* Linear Logo - Left */}
+            {/* ByteDance-style Logo - Top Right */}
+            <div
+              className="absolute"
+              style={{
+                right: "18%",
+                top: "28%",
+                transform: "translate(50%, -50%)",
+              }}
+            >
+              <div
+                className="rounded-full flex items-center justify-center"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+                }}
+              >
+                <svg viewBox="0 0 24 24" className="w-7 h-7">
+                  <defs>
+                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" style={{ stopColor: "#3B82F6", stopOpacity: 1 }} />
+                      <stop offset="50%" style={{ stopColor: "#EC4899", stopOpacity: 1 }} />
+                      <stop offset="100%" style={{ stopColor: "#F97316", stopOpacity: 1 }} />
+                    </linearGradient>
+                  </defs>
+                  <rect x="4" y="4" width="16" height="16" rx="3" fill="url(#grad1)" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Starburst/Asterisk Orange - Center */}
+            <div
+              className="absolute"
+              style={{
+                left: "50%",
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              <div
+                className="rounded-full flex items-center justify-center"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+                }}
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#FF6B35">
+                  <path d="M12 2C12 2 13 6 13 6H18L14.5 8.5L15.5 13L12 10.5L8.5 13L9.5 8.5L6 6H11C11 6 12 2 12 2Z" />
+                  <path d="M12 22C12 22 11 18 11 18H6L9.5 15.5L8.5 11L12 13.5L15.5 11L14.5 15.5L18 18H13C13 18 12 22 12 22Z" />
+                </svg>
+              </div>
+            </div>
+
+            {/* Figma Logo - Left */}
             <div
               className="absolute"
               style={{
                 left: "15%",
-                top: "55%",
+                top: "58%",
+                transform: "translate(-50%, -50%)",
               }}
             >
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8" fill="#5E6AD2">
-                  <path d="M3.005 12l7.07 7.07 7.778-7.778L21 14.44 10.075 25.365 0 15.29z"/>
+              <div
+                className="rounded-full flex items-center justify-center"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+                }}
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6">
+                  <circle cx="6" cy="6" r="3" fill="#A259FF"/>
+                  <circle cx="18" cy="6" r="3" fill="#F24E1E"/>
+                  <circle cx="18" cy="18" r="3" fill="#00D084"/>
+                  <circle cx="6" cy="18" r="3" fill="#0ACF83"/>
+                  <circle cx="12" cy="12" r="3" fill="#1ABCFE"/>
                 </svg>
               </div>
             </div>
 
-            {/* ByteDance-style Colorful Logo - Top Right */}
+            {/* Heart - Bottom Right */}
             <div
               className="absolute"
               style={{
-                right: "22%",
-                top: "25%",
+                right: "18%",
+                bottom: "25%",
+                transform: "translate(50%, 50%)",
               }}
             >
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                <div className="relative w-6 h-6 md:w-8 md:h-8">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500 via-purple-500 to-yellow-500 rounded-lg transform rotate-12"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Asterisk/Starburst Orange Logo - Center Right */}
-            <div
-              className="absolute"
-              style={{
-                right: "15%",
-                top: "48%",
-              }}
-            >
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8" fill="#FF6B35">
-                  <path d="M12 2l1.5 4.5h4.5l-3.5 2.5 1.5 4.5L12 11l-3.5 2.5 1.5-4.5-3.5-2.5h4.5z"/>
-                  <path d="M12 22l-1.5-4.5H6l3.5-2.5-1.5-4.5L12 13l3.5-2.5-1.5 4.5 3.5 2.5h-4.5z"/>
-                </svg>
-              </div>
-            </div>
-
-            {/* Heart Logo - Bottom Right */}
-            <div
-              className="absolute"
-              style={{
-                right: "25%",
-                bottom: "28%",
-              }}
-            >
-              <div className="w-12 h-12 md:w-16 md:h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
-                <svg viewBox="0 0 24 24" className="w-6 h-6 md:w-8 md:h-8" fill="#EF4444">
-                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              <div
+                className="rounded-full flex items-center justify-center"
+                style={{
+                  width: "56px",
+                  height: "56px",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",
+                }}
+              >
+                <svg viewBox="0 0 24 24" className="w-6 h-6" fill="#DC2626">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                 </svg>
               </div>
             </div>
