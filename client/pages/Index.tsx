@@ -5,17 +5,22 @@ export default function Index() {
   const [scale, setScale] = useState(1);
   const [whiteOverlayOpacity, setWhiteOverlayOpacity] = useState(0);
   const scrollInputRef = useRef(0);
+  const isScreen1ActiveRef = useRef(true);
   const maxScale = 40;
   const scrollUnits = 3;
   const pixelsPerUnit = 120;
   const maxScrollInput = scrollUnits * pixelsPerUnit;
-  const isScreenOneActive = whiteOverlayOpacity < 1;
+
+  // Update ref when burst completes
+  useEffect(() => {
+    isScreen1ActiveRef.current = whiteOverlayOpacity < 1;
+  }, [whiteOverlayOpacity]);
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       // Only apply scroll-scrub during Screen 1 (zoom animation)
       // Once burst is complete, allow normal scrolling
-      if (whiteOverlayOpacity < 1) {
+      if (isScreen1ActiveRef.current) {
         e.preventDefault();
 
         scrollInputRef.current += e.deltaY;
@@ -39,7 +44,7 @@ export default function Index() {
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, [whiteOverlayOpacity]);
+  }, []);
 
   return (
     <>
@@ -132,7 +137,7 @@ export default function Index() {
       <style>{`
         html, body {
           height: auto;
-          overflow: ${isScreenOneActive ? "hidden" : "auto"};
+          overflow: ${whiteOverlayOpacity < 1 ? "hidden" : "auto"};
           width: 100%;
           margin: 0;
           padding: 0;
