@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
-export const EarningsSummary = () => {
-  const [isVisible, setIsVisible] = useState(false);
+interface EarningsSummaryProps {
+  isActive: boolean;
+}
+
+export const EarningsSummary = ({ isActive = false }: EarningsSummaryProps) => {
   const [elapsedTime, setElapsedTime] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
   const animationFrameRef = useRef<number>();
   const startTimeRef = useRef<number>(0);
 
@@ -52,34 +54,18 @@ export const EarningsSummary = () => {
     return 0.8 + 0.2 * progress; // 0.8 to 1
   };
 
-  // Detect when earnings screen enters viewport
+  // Start animations when screen becomes active
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && !isVisible) {
-            setIsVisible(true);
-            startTimeRef.current = Date.now();
-          }
-        });
-      },
-      { threshold: 0.2 } // 20% of element visible
-    );
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
+    if (!isActive) {
+      // Reset animations when screen becomes inactive
+      setElapsedTime(0);
+      startTimeRef.current = 0;
+      return;
     }
 
-    return () => {
-      if (containerRef.current) {
-        observer.unobserve(containerRef.current);
-      }
-    };
-  }, [isVisible]);
-
-  // Animation loop
-  useEffect(() => {
-    if (!isVisible) return;
+    // Start animations immediately when screen becomes active
+    startTimeRef.current = Date.now();
+    setElapsedTime(0);
 
     const animate = () => {
       const now = Date.now();
@@ -95,7 +81,7 @@ export const EarningsSummary = () => {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [isVisible]);
+  }, [isActive]);
 
   // Animation values
   const text1Opacity = getOpacity(TIMELINE.text1.start, TIMELINE.text1.duration);
@@ -198,7 +184,6 @@ export const EarningsSummary = () => {
 
   return (
     <div
-      ref={containerRef}
       className="bg-neutral-50 overflow-hidden w-full h-full relative"
       role="main"
       aria-label="Earnings summary for 2025"
