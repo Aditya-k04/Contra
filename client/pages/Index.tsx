@@ -22,6 +22,7 @@ export default function Index() {
           src="https://api.builder.io/api/v1/image/assets/TEMP/352bc2b14b51ee7b4f1dd013e06103e38711da49?width=1600"
           alt="3D Ribbon Graphic"
           className="w-full h-full object-cover lg:object-contain max-w-[800px]"
+          style={{ color: "#151720" }}
         />
       </div>
     </div>
