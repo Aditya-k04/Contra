@@ -144,7 +144,7 @@ export default function Index() {
           left: 0,
           width: "100vw",
           height: "100vh",
-          zIndex: 40,
+          zIndex: 50,
           overflow: "hidden",
           opacity: screenState === "earnings" ? 1 : 0,
           pointerEvents: screenState === "earnings" ? "auto" : "none",
