@@ -35,35 +35,23 @@ export default function Index() {
 
   return (
     <>
-      {/* Fixed Full-Screen Image Container */}
-      <div
+      {/* Fixed Image - Positioned on right side */}
+      <img
+        src="https://api.builder.io/api/v1/image/assets/TEMP/352bc2b14b51ee7b4f1dd013e06103e38711da49?width=1600"
+        alt="3D Ribbon Graphic"
         style={{
           position: "fixed",
           top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          width: "100%",
-          height: "100%",
+          right: 0,
+          transform: `translateY(-50%) scale(${scale})`,
+          height: "70vh",
+          width: "auto",
+          objectFit: "contain",
           zIndex: 40,
           willChange: "transform",
+          transition: "transform 0.016s linear",
         }}
-      >
-        <img
-          src="https://api.builder.io/api/v1/image/assets/TEMP/352bc2b14b51ee7b4f1dd013e06103e38711da49?width=1600"
-          alt="3D Ribbon Graphic"
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: `translate(-50%, -50%) scale(${scale})`,
-            width: "800px",
-            height: "800px",
-            objectFit: "contain",
-            willChange: "transform",
-            transition: "transform 0.016s linear",
-          }}
-        />
-      </div>
+      />
 
       {/* White Burst Overlay */}
       <div
