@@ -1,23 +1,32 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 export default function Index() {
   const [scale, setScale] = useState(1);
   const [whiteOverlayOpacity, setWhiteOverlayOpacity] = useState(0);
   const maxScale = 40;
-  const scrollDistance = window.innerHeight * 3; // ~300% of viewport
+  const scrollUnits = 3; // 3 scroll units to reach max scale
+  const pixelsPerUnit = 120; // sensitivity: pixels of scroll per unit
+  const maxScrollInput = scrollUnits * pixelsPerUnit;
+
+  // Track accumulated scroll input
+  let scrollInput = 0;
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+
+      // Accumulate scroll input
+      scrollInput += e.deltaY;
+      scrollInput = Math.max(0, Math.min(scrollInput, maxScrollInput)); // Clamp between 0 and max
+
       // Calculate progress (0 to 1)
-      const progress = Math.min(scrollY / scrollDistance, 1);
-      
+      const progress = scrollInput / maxScrollInput;
+
       // EaseInOut easing function for smooth growth
-      const easedProgress = progress < 0.5 
-        ? 2 * progress * progress 
+      const easedProgress = progress < 0.5
+        ? 2 * progress * progress
         : -1 + (4 - 2 * progress) * progress;
-      
+
       const currentScale = 1 + easedProgress * (maxScale - 1);
       setScale(currentScale);
 
@@ -29,8 +38,8 @@ export default function Index() {
       }
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("wheel", handleWheel, { passive: false });
+    return () => window.removeEventListener("wheel", handleWheel);
   }, []);
 
   return (
@@ -63,25 +72,26 @@ export default function Index() {
           height: "100vh",
           backgroundColor: "#FFFFFF",
           opacity: whiteOverlayOpacity,
-          zIndex: 50,
-          willChange: "opacity, transform",
-          transition: "opacity 0.6s ease-out, transform 0.8s ease-out",
-          transform: whiteOverlayOpacity > 0 ? "scale(1.1)" : "scale(1)",
+          zIndex: 10,
+          willChange: "opacity",
+          transition: "opacity 0.6s ease-out",
           pointerEvents: whiteOverlayOpacity === 1 ? "auto" : "none",
         }}
       />
 
-      {/* Scrollable Content Container */}
+      {/* Main Content Container - Fixed viewport */}
       <div
         style={{
           position: "relative",
           zIndex: 30,
           backgroundColor: "#000000",
+          width: "100vw",
+          height: "100vh",
           overflow: "hidden",
         }}
       >
-        {/* Hero Section - Dark */}
-        <div className="min-h-screen flex flex-col lg:flex-row relative">
+        {/* Hero Section */}
+        <div className="w-full h-full flex flex-col lg:flex-row relative">
           {/* Left Section */}
           <div className="flex-1 bg-[#FAFAFA] flex items-center justify-center px-6 py-12 lg:py-0">
             <div className="flex flex-col items-start gap-6 max-w-[492px] w-full">
@@ -97,27 +107,16 @@ export default function Index() {
             </div>
           </div>
 
-          {/* Right Section - Empty for fixed image */}
+          {/* Right Section */}
           <div className="flex-1 bg-[#151720]" />
-        </div>
-
-        {/* Scroll Content */}
-        <div className="min-h-[300vh] bg-gradient-to-b from-black via-gray-900 to-white flex items-center justify-center">
-          <div className="text-center px-6 py-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Scroll Complete
-            </h2>
-            <p className="text-lg md:text-xl text-gray-300">
-              You've reached the end of the zoom journey
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* Global overflow hidden style */}
+      {/* Global styles */}
       <style>{`
         html, body {
-          overflow-x: hidden;
+          height: 100vh;
+          overflow: hidden;
           width: 100%;
           margin: 0;
           padding: 0;
