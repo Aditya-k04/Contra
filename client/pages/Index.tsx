@@ -2,27 +2,22 @@ import { useEffect, useState, useRef } from "react";
 import { EarningsSummary } from "@/components/EarningsSummary";
 
 export default function Index() {
+  // Screen state: "screen1" or "earnings"
+  const [screenState, setScreenState] = useState<"screen1" | "earnings">("screen1");
   const [scale, setScale] = useState(1);
   const [whiteOverlayOpacity, setWhiteOverlayOpacity] = useState(0);
   const scrollInputRef = useRef(0);
-  const isScreen1ActiveRef = useRef(true);
   const maxScale = 40;
   const scrollUnits = 3;
   const pixelsPerUnit = 120;
   const maxScrollInput = scrollUnits * pixelsPerUnit;
 
-  // Update ref when burst completes
-  useEffect(() => {
-    isScreen1ActiveRef.current = whiteOverlayOpacity < 1;
-  }, [whiteOverlayOpacity]);
-
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      // Only apply scroll-scrub during Screen 1 (zoom animation)
-      // Once burst is complete, allow normal scrolling
-      if (isScreen1ActiveRef.current) {
-        e.preventDefault();
+      e.preventDefault();
 
+      if (screenState === "screen1") {
+        // Screen 1: Scroll-scrub zoom animation
         scrollInputRef.current += e.deltaY;
         scrollInputRef.current = Math.max(0, Math.min(scrollInputRef.current, maxScrollInput));
 
@@ -38,13 +33,28 @@ export default function Index() {
         const burstStartScale = 35;
         const burstRange = maxScale - burstStartScale;
         const burstProgress = Math.max(0, (currentScale - burstStartScale) / burstRange);
-        setWhiteOverlayOpacity(Math.min(1, burstProgress));
+        const newOpacity = Math.min(1, burstProgress);
+        setWhiteOverlayOpacity(newOpacity);
+
+        // When burst completes, switch to Earnings screen
+        if (newOpacity >= 1 && scrollInputRef.current >= maxScrollInput) {
+          setScreenState("earnings");
+        }
+      } else if (screenState === "earnings") {
+        // Earnings screen: Detect scroll direction to go back
+        if (e.deltaY < 0) {
+          // Scrolling UP: return to Screen 1
+          setScreenState("screen1");
+          scrollInputRef.current = maxScrollInput; // Set to max zoom state
+          setScale(maxScale);
+          setWhiteOverlayOpacity(1); // Keep burst visible at this state
+        }
       }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, []);
+  }, [screenState]);
 
   return (
     <>
@@ -65,6 +75,8 @@ export default function Index() {
           zIndex: 40,
           willChange: "transform",
           transition: "transform 0.016s linear",
+          opacity: screenState === "screen1" ? 1 : 0,
+          pointerEvents: screenState === "screen1" ? "auto" : "none",
         }}
       />
 
@@ -77,24 +89,29 @@ export default function Index() {
           width: "100vw",
           height: "100vh",
           backgroundColor: "#FFFFFF",
-          opacity: whiteOverlayOpacity,
+          opacity: screenState === "screen1" ? whiteOverlayOpacity : 0,
           zIndex: 45,
           willChange: "opacity, transform",
-          transition: "opacity 0.2s linear, transform 0.2s linear",
-          transform: `scale(${1 + whiteOverlayOpacity * 0.1})`,
-          pointerEvents: whiteOverlayOpacity > 0.9 ? "auto" : "none",
+          transition: screenState === "screen1" ? "opacity 0.2s linear, transform 0.2s linear" : "opacity 0.3s ease-out",
+          transform: screenState === "screen1" ? `scale(${1 + whiteOverlayOpacity * 0.1})` : "scale(1)",
+          pointerEvents: screenState === "screen1" && whiteOverlayOpacity > 0.9 ? "auto" : "none",
         }}
       />
 
       {/* SCREEN 1: Main Content Container */}
       <div
         style={{
-          position: "relative",
-          zIndex: 30,
-          backgroundColor: "#000000",
+          position: "fixed",
+          top: 0,
+          left: 0,
           width: "100vw",
           height: "100vh",
+          zIndex: 30,
+          backgroundColor: "#000000",
           overflow: "hidden",
+          opacity: screenState === "screen1" ? 1 : 0,
+          pointerEvents: screenState === "screen1" ? "auto" : "none",
+          transition: "opacity 0.3s ease-out",
         }}
       >
         {/* Hero Section */}
@@ -120,24 +137,38 @@ export default function Index() {
       </div>
 
       {/* ===== SCREEN 2: EARNINGS SUMMARY ===== */}
-      {/* This appears as the next screen in natural flow */}
       <div
         style={{
-          position: "relative",
-          zIndex: 50,
+          position: "fixed",
+          top: 0,
+          left: 0,
           width: "100vw",
-          height: "900px",
+          height: "100vh",
+          zIndex: 50,
           overflow: "hidden",
+          opacity: screenState === "earnings" ? 1 : 0,
+          pointerEvents: screenState === "earnings" ? "auto" : "none",
+          transition: screenState === "earnings" ? "opacity 0.4s ease-out" : "opacity 0.2s ease-out",
+          backgroundColor: "#FAFAFA",
         }}
       >
-        <EarningsSummary />
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "100vh",
+            overflow: "hidden",
+          }}
+        >
+          <EarningsSummary isActive={screenState === "earnings"} />
+        </div>
       </div>
 
       {/* Global styles */}
       <style>{`
         html, body {
-          height: auto;
-          overflow: ${whiteOverlayOpacity < 1 ? "hidden" : "auto"};
+          height: 100vh;
+          overflow: hidden;
           width: 100%;
           margin: 0;
           padding: 0;
