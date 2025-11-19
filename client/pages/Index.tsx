@@ -1,25 +1,23 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { EarningsSummary } from "@/components/EarningsSummary";
 
 export default function Index() {
   const [scale, setScale] = useState(1);
   const [whiteOverlayOpacity, setWhiteOverlayOpacity] = useState(0);
-  const [summaryScreenVisible, setSummaryScreenVisible] = useState(false);
+  const scrollInputRef = useRef(0);
   const maxScale = 40;
   const scrollUnits = 3;
   const pixelsPerUnit = 120;
   const maxScrollInput = scrollUnits * pixelsPerUnit;
 
-  let scrollInput = 0;
-
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
       e.preventDefault();
 
-      scrollInput += e.deltaY;
-      scrollInput = Math.max(0, Math.min(scrollInput, maxScrollInput));
+      scrollInputRef.current += e.deltaY;
+      scrollInputRef.current = Math.max(0, Math.min(scrollInputRef.current, maxScrollInput));
 
-      const progress = scrollInput / maxScrollInput;
+      const progress = scrollInputRef.current / maxScrollInput;
 
       const easedProgress = progress < 0.5
         ? 2 * progress * progress
@@ -32,11 +30,6 @@ export default function Index() {
       const burstRange = maxScale - burstStartScale;
       const burstProgress = Math.max(0, (currentScale - burstStartScale) / burstRange);
       setWhiteOverlayOpacity(Math.min(1, burstProgress));
-
-      // Trigger summary screen when white burst is complete
-      if (burstProgress >= 1) {
-        setSummaryScreenVisible(true);
-      }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
@@ -73,15 +66,15 @@ export default function Index() {
           height: "100vh",
           backgroundColor: "#FFFFFF",
           opacity: whiteOverlayOpacity,
-          zIndex: 50,
+          zIndex: 45,
           willChange: "opacity, transform",
           transition: "opacity 0.2s linear, transform 0.2s linear",
           transform: `scale(${1 + whiteOverlayOpacity * 0.1})`,
-          pointerEvents: whiteOverlayOpacity === 1 ? "auto" : "none",
+          pointerEvents: whiteOverlayOpacity > 0.9 ? "auto" : "none",
         }}
       />
 
-      {/* Yearly Earnings Summary Screen */}
+      {/* Yearly Earnings Summary Screen - Bound to white overlay opacity */}
       <div
         style={{
           position: "fixed",
@@ -89,12 +82,12 @@ export default function Index() {
           left: 0,
           width: "100vw",
           height: "100vh",
-          zIndex: 60,
-          opacity: summaryScreenVisible ? 1 : 0,
-          transform: summaryScreenVisible ? "translateY(0)" : "translateY(20px)",
-          transition: "opacity 0.5s ease-out, transform 0.5s ease-out",
+          zIndex: 50,
+          opacity: whiteOverlayOpacity,
+          transform: whiteOverlayOpacity > 0 ? "translateY(0)" : "translateY(20px)",
+          transition: "opacity 0.2s linear, transform 0.2s linear",
           willChange: "opacity, transform",
-          pointerEvents: summaryScreenVisible ? "auto" : "none",
+          pointerEvents: whiteOverlayOpacity > 0.9 ? "auto" : "none",
           overflow: "hidden",
         }}
       >
