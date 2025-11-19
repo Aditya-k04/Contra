@@ -138,7 +138,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       alt: "Project icon 1",
       top: "547px",
       left: "675px",
-      progress: badge1Progress,
+      progress: badgeProgresses[0],
     },
     {
       id: 2,
@@ -146,7 +146,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       alt: "Project icon 2",
       top: "394px",
       left: "849px",
-      progress: badge2Progress,
+      progress: badgeProgresses[1],
     },
     {
       id: 3,
@@ -154,7 +154,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       alt: "Project icon 3",
       top: "595px",
       left: "338px",
-      progress: badge3Progress,
+      progress: badgeProgresses[2],
     },
     {
       id: 4,
@@ -162,7 +162,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       alt: "Project icon 4",
       top: "715px",
       left: "1111px",
-      progress: badge4Progress,
+      progress: badgeProgresses[3],
     },
     {
       id: 5,
@@ -170,7 +170,7 @@ export const EarningsSummary = ({ animationProgress = 0 }: EarningsSummaryProps)
       alt: "Project icon 5",
       top: "425px",
       left: "422px",
-      progress: badge5Progress,
+      progress: badgeProgresses[4],
     },
   ];
 
