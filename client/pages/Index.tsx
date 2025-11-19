@@ -9,32 +9,36 @@ export default function Index() {
   const scrollUnits = 3;
   const pixelsPerUnit = 120;
   const maxScrollInput = scrollUnits * pixelsPerUnit;
+  const isScreenOneActive = whiteOverlayOpacity < 1;
 
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
+      // Only prevent default scroll during Screen 1 (zoom animation)
+      if (isScreenOneActive) {
+        e.preventDefault();
 
-      scrollInputRef.current += e.deltaY;
-      scrollInputRef.current = Math.max(0, Math.min(scrollInputRef.current, maxScrollInput));
+        scrollInputRef.current += e.deltaY;
+        scrollInputRef.current = Math.max(0, Math.min(scrollInputRef.current, maxScrollInput));
 
-      const progress = scrollInputRef.current / maxScrollInput;
+        const progress = scrollInputRef.current / maxScrollInput;
 
-      const easedProgress = progress < 0.5
-        ? 2 * progress * progress
-        : -1 + (4 - 2 * progress) * progress;
+        const easedProgress = progress < 0.5
+          ? 2 * progress * progress
+          : -1 + (4 - 2 * progress) * progress;
 
-      const currentScale = 1 + easedProgress * (maxScale - 1);
-      setScale(currentScale);
+        const currentScale = 1 + easedProgress * (maxScale - 1);
+        setScale(currentScale);
 
-      const burstStartScale = 35;
-      const burstRange = maxScale - burstStartScale;
-      const burstProgress = Math.max(0, (currentScale - burstStartScale) / burstRange);
-      setWhiteOverlayOpacity(Math.min(1, burstProgress));
+        const burstStartScale = 35;
+        const burstRange = maxScale - burstStartScale;
+        const burstProgress = Math.max(0, (currentScale - burstStartScale) / burstRange);
+        setWhiteOverlayOpacity(Math.min(1, burstProgress));
+      }
     };
 
     window.addEventListener("wheel", handleWheel, { passive: false });
     return () => window.removeEventListener("wheel", handleWheel);
-  }, []);
+  }, [isScreenOneActive]);
 
   return (
     <>
@@ -126,8 +130,8 @@ export default function Index() {
       {/* Global styles */}
       <style>{`
         html, body {
-          height: 100vh;
-          overflow: hidden;
+          height: auto;
+          overflow: ${isScreenOneActive ? "hidden" : "auto"};
           width: 100%;
           margin: 0;
           padding: 0;
